@@ -1,0 +1,38 @@
+ORG 1000H
+NUM1 DW 1234; 04D2H
+NUM2 DW 4321; 10E1H
+
+ORG 3000H
+SWAP:MOV BX, SP; doble indireccion!
+ADD BX, 2; bx apunta indirectamente a num2, para dejar atras el IP
+PUSH BX
+MOV AX, [BX]; ax tiene la dir num2
+MOV BX, AX; bx apunta a num2
+MOV AX, [BX];ax tiene el valor num2
+
+POP BX
+ADD BX, 2; bx apunta indirectamente a num1
+PUSH BX
+MOV CX, [BX]; cx tiene la dir num1
+MOV BX, CX; bx tiene la dir num1
+MOV CX, [BX]; cx tiene el valor num1
+
+MOV [BX], AX; num1 vale num2
+POP BX
+SUB BX, 2; bx apunta indirectamente num2
+MOV AX, [BX]
+MOV BX, AX; bx apunta a num2
+MOV [BX], CX; num2 vale num1;
+
+RET
+
+ORG 2000H
+MOV BX, OFFSET NUM1
+PUSH BX
+MOV BX, OFFSET NUM2
+PUSH BX
+CALL SWAP
+POP BX
+POP BX
+HLT
+END

@@ -1,0 +1,25 @@
+ORG 1000H
+CADENA DB "AASDKO"
+CAR DB "A"; 65h
+EX DB "X"; 58h
+
+ORG 3000H
+CONCAR:CMP [BX], AL; me fijo si el 1er elemento es = al caracter
+JNZ SALTO
+MOV [BX], Dl
+SALTO: INC BX
+DEC CL
+JNZ CONCAR
+RET
+
+ORG 2000H
+
+MOV BX, OFFSET EX
+MOV CL, OFFSET CAR - OFFSET CADENA; cl con la dimension de la cadena
+MOV Dl, [BX]; dx con la x a ingresar
+DEC BX; bx offset car
+MOV AL, [BX]; ax con el valor del car
+MOV BX, OFFSET CADENA; bx con la dir de la cadena
+CALL CONCAR;referencia de cadena y valor del caracter
+HLT
+END
