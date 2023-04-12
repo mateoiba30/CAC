@@ -4,7 +4,8 @@ Este repositorio contiene las prácticas realizadas en la materia **Conceptos de
 
 ## Prácticas
 
-- [practica1](practica1/)
+- [practica 1](practica1/)
+- [practica 2](practica2/)
 
 ## Licencia
 
