@@ -14,7 +14,7 @@ INT 7;en BX tengo la dir del inicio del bloque de caracteres
 MOV BX, OFFSET NUM
 INT 6;el la dir que dice bx guarda el num ingresado
 MOV AL, 1
-INT 7
+INT 7;imprime el numero ingresado
 MOV CL, NUM
 INT 0
 END
