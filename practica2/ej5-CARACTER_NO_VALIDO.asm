@@ -8,7 +8,7 @@ NUM DB ?;podría declararlo en otro lugar
 
 ORG 3000H;VERIFICO QUE EL CARACTER SESA UN NRO, ENTRE 48 Y 57
 ES_NUM:MOV DH, 2FH;esto es el cero -1 
-MOV DL,NUM;dl tiene lo ingresado NUM=[BX]
+MOV DL,[BX];dl tiene lo ingresado NUM=[BX]
 MOV AH,0
 
 WHILE:CMP DH,3AH;si me pasé del 9 no entro
@@ -28,7 +28,7 @@ INT 6;el la dir que dice bx guarda el num ingresado
 CALL ES_NUM
 
 CMP AH,0FFH;da cero si es un numero
-JZ SALTO;SI ES CERO NO IMPRIMO NADA
+JZ SALTO;SI ES CERO, osea si ingrese un numero, NO IMPRIMO NADA
 MOV BX, OFFSET MSJ2;si es num
 INT 7
 
