@@ -1,0 +1,46 @@
+ORG 1000H
+MSJ DB "INGRESE UN NUMERO:"
+FIN DB ?
+CERO DB "CERO  "
+UNO DB "UNO   "
+DOS DB "DOS   "
+TRES DB "TRES  "
+CUATRO DB "CUATRO"
+CINCO DB "CINCO "
+SEIS DB "SEIS  "
+SIETE DB "SIETE "
+OCHO DB "OCHO  "
+NUEVE DB "NUEVO "
+
+ORG 1500H
+NUM1 DB ?;podría declararlo en otro lugar
+NUM2 DB ?
+
+ORG 2000H
+
+MOV BX, OFFSET NUM1
+INT 6;leo num
+
+MOV BX, OFFSET NUM2
+INT 6
+
+MOV CL, [BX]; CL tiene num2
+SUB CL,30H;cargo el valor numerico
+ADD CL, NUM1; al=num1 + num2 en 1 celda de hexadecimal
+SUB CL, 30H; llevo al valor numerico
+
+MOV AH,0H;contador de vueltas
+MOV DH,0
+MOV DL, CL;DL tiene una copia, mientras CX guarda la suma
+FOR:ADD CX,DX;OPERO CON 2 REGISTROS POR SI EL NUMERO CRECE MUCHO
+INC AH
+CMP AH,5H;LA PRIMERA VUELTA YA MULTIPLICA POR 2
+JNZ FOR;si no es la sexta rep repito
+
+MOV AL,6H
+MOV BX, OFFSET CERO
+ADD BX, CX;si le sumo 6n cambio al mensaje del numero n
+INT 7
+
+INT 0
+END
