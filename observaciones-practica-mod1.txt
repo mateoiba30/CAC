@@ -1,0 +1,186 @@
+Observaciones Importantes
+El IRR, en cuanto a practica hablamos, indica que tipo de interrupccion quiere interrumpir, y cuando hablamos de ISR es el tipo de interrupción que se esta llevando a cabo en ese PRECISO momento.
+Es decir que en el punto 3, el ISR=02H nos estaría indicando que que está interrumpiendo el TIMER, mientras que cuando el IRR cuando esta en 01H indica que F10 quiere interrumpir.
+La posición prendida del IRR se pone en 0 en el momento en que se entra a la interrupción, mientras que el ISR se pone en 0 cuando se hace el MOV AL,EOI; MOV OUT EOI,AL.
+Cuando hablamos de el handshake y sus 2 maneras de aplicación, tanto por interrupción como por polling, nos encontramos que este último posee una desventaja sustancial la cual es que el procesador pregunta constantemente a la impresora para ver si esta lista y mandarle caracteres, mientras que por interrupción la propia impresora mandara una se;al de interrupción al procesador cada vez que esté lista para operar,permitiendo al procesador realizar otras operaciones en el mid time.
+INTERRUPCIONES
+INT 6 sirve para leer algo de teclado
+INT 7 sirve para mostrar en pantalla algo
+Tanto en int 6 como in 7, necesito apuntar con BX al a dirección del elemento o a leer(en caso de int 6) o a mostrar (en caso de int 7), auque a este ultimo le tendremos que especificar mediante el registro AL, cuantos elementos se mostraran en pantalla.
+INT 0 para finalizar el programa
+Cuando sean interrupciones como el TIMER o F10, usaremos el PIC.
+Hay etiquetas arriba de todo:
+PIC EQU 20H
+N_F10 EQU 10(es 10 decimal) (porque se multiplican por 4)
+ORG 40
+IP_F10 DW RUT_F10
+
+Como configuro el pic?
+Deshabilito interrupciones con CLI
+
+le muevo a AL un numero tal, que enmascare todo menos la interrupcion que quiero que pueda operar
+MOV AL, 0FEH (le muevo 1111 1110, donde el 0 es f10)
+OUT PIC+1,AL (le muevo al IMR el valor)
+cada registro INT del PIC corresponde a una interrupcion en particular, que es ahi donde cargaremos la etiqueta N_F10 que nos redirecciona a esa posicion x 4, que a su vez redirecciona a una rutina(no subrutina)
+MOV AL,N_F10
+OUT PIC+4,N_F10
+MOV DX,0
+habilito las interrupciones con STI 
+
+ahora las rutinas de interrupcion tienen que ser asi
+RUT_F10(nombre de la etiqueta que me redirecciona cuando apreto f10)
+pusheo registros ausar
+PUSH AX
+MOV AL,20H cuando hago este mov, ES //OBLIGATORIO// ya que indica al PIC que termino, por ende el ISR se pone en 0
+OUT PIC,AL
+POP AX 
+IRET 
+
+En el caso del TIMER tendremos en cuenta un par de cosas extra
+Una etiqueta timer con EQU 10H
+TIMER EQU 10H
+N_CLK EQU 10
+
+ORG 40
+IP_CLK DW RUT_CLK
+
+Como configuramos el pic en este caso?
+CLI
+MOV AL,0FDH (movemos el valor 1111 1101, donde el 0 pertenece al timer)
+OUT PIC+1,AL (le ponemos al IMR 1111 1101)
+MOV AL,N_CLK (le movemos a AL la etiquet que redirecciona a la rutina de interrupcion)
+OUT PIC+5,AL (el registro del timer es el INT 1, donde se pone la direccion de la etiqueta)
+MOV AL,1
+OUT TIMER+1,AL (se configura el registro de comparacion en 0000 0001)
+MOV AL,0
+OUT TIMER,AL (le ponemos el registro contador en 0000 0000)
+En el momento que entra a la rutina RUT_CLK, el contador se pone en 1 , que luego se pone en 0 al salir, lo que indica que paso 1 segundo(para la computadora al ser de 1hz)
+STI
+
+en RUT_CLK: tenemos varias operaciones pero luego hay un reset
+INT 7(muestro lo que estaba apuntando)
+MOV AL,0
+OUT TIMER,AL (indico que ya paso el segundo)
+MOV AL, (SIEMPRE modificar el ISR)
+OUT PIC,AL
+IRET 
+
+En resumen para Interrupciones que solo incluyan timer y f10 tendremos en cuenta estas cosas:
+
+PIC EQU 20H(declarar donde se encuentra el PIC)
+TIMER EQU 10H (TIMER CONTADOR,TIMER + 1 COMPARADOR)
+N_CLK EQU 10 (direccion decimal multiplicada por 4)
+N_F10 EQU 11
+
+ORG 40
+IP_F10 DW RUT_CLK
+
+ORG 44
+IP_CLK DW RUT_F10
+
+en PIC pongo la mascara de lo habilitado
+MOV AL,0FEH (1111 1110, solo f10)
+OUT PIC+1,AL
+MOV AL,0FCH( 1111 1100, estan las 2 habilitadas al mismo tiempo pero f10 tiene mas prioridad)
+MOV AL,0FDH (1111 1101, solo timer) 
+
+/////////////////////////////////
+
+LUCES E IMPRESORAS
+
+Aca dependera mucho si nos referimos a LUCES o Impresora y si trabajamos con el pio, interrupciones o handshake
+
+En el caso de las luces por PIO:
+Trabajamos con 4 registros , 2 puertos
+
+PA EQU 30H
+PB EQU 31H
+CA EQU 32H
+CB EQU 33H
+
+ORG 2000H
+MOV AL, 0FFH (1111 1111)
+OUT CA, AL (Puerto A)
+MOV AL,0 
+OUT CB,AL (Puerto B salida)
+POLL: IN AL,PA
+OUT PB,AL
+JMP POLL
+END
+
+Las posiciones del pio ya estan establecidas consecutivamente , por ende en un programa real, la utilizacion del PIO seria la siguiente:
+PIO EQU 30H
+
+MOV AL,0
+OUT PIO + 3,AL (al registro CB lo pongo en 0)----->Duda, para habilitar a que el numero colocado en PB tenga efecto?
+OUT PIO + 1, AL (Pongo el registro PB en 0, por ende todas las luces se apagan, ya que este esta conectado directamente con las luces)
+luego cada vez que hago alguna operacion y pongo un numero en PB(pio + 1)se activara alguna luz
+MOV PIO+1,AL
+
+En el caso de la impresora por PIO, le mandaremos al CA el numero 0FDH(1111 1101)
+luego al CB, como en las luces, el numero 0.
+luego haremos
+IN AL,PIO
+AND AL,0FDH 
+OUT PIO,AL (por convencion, para asegurarnos que el strobe se encuentra en 0)
+
+Luego para ir mandando los caracteres usaremos esta secuencia
+
+POLL:IN AL,PIO
+AND AL,1 
+JNZ POLL (aca lo que hace es chequear si la impreosa esta busy, ya que en el pio(posicion 30H), el bit menos significativo 0000 000 -->1<-- indica si la impresora esta ocupada o no,osea si el buffer esta lleno y todavia esta imprimiendo)
+si no esta ocupada se mueve el valor que se quiere enviar luego a la impresora
+para enviarlo se hace: OUT PIO+1,AL (osea PB, como en las luces, sin embargo esto no hace que se envie el valor, para realizar esto se tiene que hacer que hacer el strobe)
+luego para pulsar strobe
+IN AL,PIO
+OR AL,02H (se hace un or entre 0000 00 -->0<-- 0, osea que se pone en 1 y luego se actualiza el valor en el pio)
+OUT PIO,AL
+IN AL,PIO
+AND AL,0FDH(se hace un AND con el valor 1111 1101 para que quede el segundo bit menos significativo en 0)
+OUT PIO,AL para actualizar el valor
+
+
+IMPRESORAS CON HANDSHAKE
+En el caso del handshake, al no usar un puerto de proposito general (PIO), las operaciones seran diferentes
+
+Hay una configuracion inical, donde en HAND+1, es decir el segundo registro requiere si o si que el bit mas significativo este en 0, entonces hacemos
+HAND EQU 40H
+
+ORG 2000H
+
+IN AL,HAND+1
+AND AL,7FH (el numero almacenado en el hand ???? ????, requiere que el bit mas significativo este en 0, por ende le hace un and con 0111 1111, donde al hacer la operacion queda 0??? ????)
+OUT HAND+1,AL
+luego en el POLL, el bit menos significativo de HAND+1 sera el de busy, por ende estara en 1 si es esta busy o 0 si se puede hacer strobe, tal como pasa con el PIO+0
+IN AL,HAND+1
+AND AL,1
+JNZ POLL
+MOV AL,[BX] --> le muevo el valor apuntado por BX
+OUT HAND,AL (actua como el PB, peor no tengo que poner el segundo bit menos significativo en 1 con un OR)
+
+CUANDO ES POR INTERRUPCIONES:
+N_HND EQU 10
+ORG 40
+IP_HND DW RUT_HND
+En el caso de que usamos el hand por interrupcion veremos lo siguiente:
+CLI
+Se configura el PIC,mandando 
+MOV AL,0FBH (1111 1011)
+OUT PIC+1,AL 
+MOV AL,N_HND
+OUT PIC+6,AL (se envia la rutina de interurpcion)
+MOV AL, 80H (le mando el numero 1000 0000 al registro de estado)
+OUT HAND+1,AL
+STI
+LAZO: CMP CL,0 (cl tiene cargado un contador)
+JNZ LAZO
+IN AL,HAND+1
+AND AL,7FH (le indica al hand que no puede interrumpir mas mandando 0111 1111)
+OUT HAND+1,AL
+INT 0
+END
+
+ORG 3000H
+RUT_HND: PUSH AX
+MOV AL,[BX] (le muevo el caracter)
+OUT HAND,AL (lo pongo en el hand)
