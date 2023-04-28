@@ -6,13 +6,11 @@ N_CLK EQU 20
 ORG 80
 IP_CLK DW RUT_CLK
 
-ORG 1000H
-INICIO DB 1; el contador de las luces inicia en 1
-
 ORG 2000H ; muestro numeros del contador con luces, en binario
 CLI
 MOV DL,1;indica que hay que rotar a la izqueirda
-MOV DH,0
+MOV DH,-1;la 1ra vez hace 1 demás
+MOV CH,1; numero q indica luz
 
 MOV AL,0FCH; habilito interrupciones del timer
 OUT PIC+1,AL
@@ -42,13 +40,9 @@ ROTARIZQ:ADD CL,CL
 ADC CL,0;SI EN LA OPERACION ANTERIOR SE PRENDIO EL FLAG, ENTONCES AGREGO UNO AL FINAL
 RET
 
-RUT_CLK:MOV AH,8
-CMP DL,1
-JZ SALTO3
-DEC AH
-SALTO3:INC DH
-MOV CL,INICIO
-CMP DH,AH;hago 8 para un lado y 8 para otra
+RUT_CLK:INC DH
+MOV CL,CH
+CMP DH,7;hago 8 para un lado y 8 para otra
 JNZ SALTO2
 MOV DH,0
 NOT DL;INVIERTE EL BIT
@@ -61,8 +55,8 @@ JMP FIN
 DERECHA:MOV AL,7
 CALL ROTARDER
 
-FIN:MOV INICIO,CL
-LUCES: MOV AL, INICIO
+FIN:MOV CH,CL
+LUCES: MOV AL, CH
 OUT PIO+1, AL; el PB tiene en 1 los bits del numero para prender esas luces
 MOV AL, 0
 OUT TIMER, AL;reinicio contador 
