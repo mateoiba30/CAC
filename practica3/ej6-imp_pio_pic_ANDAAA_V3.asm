@@ -32,9 +32,10 @@ MOV CL,OFFSET FIN - OFFSET NUMS
 LAZO: INC BX
 
 ;NO NECESARIO HACER PLLING PORQUE AL SALIR YA COMPARO ESPERANDO INT
-;POLL: IN AL, PIO; espero a que no esté BUSY la impresora
-;AND AL, 1
-;JNZ POLL
+;pero si tuviera mas de 5 datos a enviar ahí ya necesito polling
+POLL: IN AL, PIO; espero a que no esté BUSY la impresora
+AND AL, 1
+JNZ POLL
 MOV AL, [BX]
 OUT PIO+1, AL;mando caracter a PB
 CALL PULSO;imprimo
