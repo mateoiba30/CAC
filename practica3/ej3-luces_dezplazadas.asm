@@ -12,7 +12,7 @@ MOV DL,1;indica que hay que rotar a la izqueirda
 MOV DH,-1;la 1ra vez hace 1 demás
 MOV CH,1; numero q indica luz
 
-MOV AL,0FCH; habilito interrupciones del timer
+MOV AL,0FDH; habilito interrupciones del timer
 OUT PIC+1,AL
 MOV AL, N_CLK
 OUT PIC+5, AL ; le mando la dir de la interrupcion al timer, INT1
