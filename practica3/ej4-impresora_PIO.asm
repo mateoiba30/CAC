@@ -12,7 +12,7 @@ OUT PIO+2, AL;activa BUSY pero desactiva STROBE
 MOV AL, 0
 OUT PIO+3, AL; activo todos los bits de escritura de PB
 IN AL, PIO
-AND AL, 0FDH; deja encendido los bits que coinciden con 11111101, BUSY desactivado, STROBE activado
+AND AL, 0FDH; deja encendido los bits que coinciden con 11111101,STROBE  desactivado
 OUT PIO, AL ; FIN INICIALIZACION
 
 MOV BX, OFFSET MSJ;BX apunta al mensaje
