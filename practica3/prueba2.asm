@@ -1,0 +1,6 @@
+ORG 2000H
+
+INC BX    INX BX
+
+INT 0
+END
