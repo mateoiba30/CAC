@@ -1,15 +1,10 @@
 # CAC
 
 Este repositorio contiene las prácticas realizadas en la materia **Conceptos de Arquitectura de Computadoras**.
+Módulo 1: procesador MSX88 monociclo
+Módulo 2: procesador WinMips multiciclo
 
 ## Prácticas
 
-- [practica 1](practica1/)
-- [practica 2](practica2/)
-- [practica 3](practica3/)
-- [parciales-viejos](parcial_practica_mod1/)
-
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+- [modulo 1](mod1_MSX88_monociclo/)
+- [modulo 2](mod2_winmips_multiciclo/)
