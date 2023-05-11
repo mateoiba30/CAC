@@ -1,0 +1,17 @@
+1)
+a)dadd r1, r2, r0
+suma sin inmediato de r2 y r0 y guardo en r1 (pueden haber valores con signo)
+como r0 simpre vale cero, cargo el valor de r2 en r1
+
+b)daddi r2, r0, 5
+suma con inmediato 5, guardo en r2 (admite valores con signo)
+como r0 simpre vale cero, cargo el valor de 5 en r1
+
+c)dsub r4,r4,r4 resta el 2do reg con el tercero, y lo guarda en el 1ro (vaores sin signo)
+en este caso le manda cero a r4
+
+d)daddi r5, r5, -1
+le resto 1 a r5 y lo modfico
+
+e)xori r6, r6, 0xffffffffffffffff
+XOR bit a bit entre r6 y el inmediato, guardo en r6
