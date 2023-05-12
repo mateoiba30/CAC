@@ -1,1 +1,0 @@
-C:\Users\Mateo\Documents\Auni\2023\cuatri1\Concepto de Arquitectura de Computadoras\mod2_winmips_multiciclo\ej3dp1-forwarding_tabla.s
