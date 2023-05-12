@@ -20,3 +20,4 @@ sd r3,y(r0)
 halt
 
 #con los delay slot puestos funciona bien y sin atascos de control y sin RAW tampoco
+#si bien se parece mas a un do while que un while y a queda en -1, la solución está bien
