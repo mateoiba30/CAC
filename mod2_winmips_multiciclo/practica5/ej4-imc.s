@@ -11,9 +11,14 @@ v3: .double 30
 .code
 l.d f1, peso(r0)
 l.d f2, altura(r0)
-nop# evito raw de la div
-
-div.d f1, f1, f2
+mul.d f1,f1,f1
+nop
+nop
+nop
+nop
+nop
+nop# evito raws de la div y s.lt.d, esta es la cant maxima de nops donde cada nop me salva de 2 atascos
+div.d f1, f1, f2# va a atascarse bastante por esperar a mul
 
 l.d f3, v1(r0)
 c.lt.d f1,f3 #deja en 1 FP si es menor a 18,5, tiene 21 RAWs y STR por div (ya no me afecta el l.d de arriba)
