@@ -18,7 +18,7 @@ s.d f4, res2(r0) #guardo, con 1 RAW por esperar a f4 de la mul y un atasco estru
 halt #recordar que cuenta como instrucción
 
 #!!los comentarios muy largos da errores
-#analizo con forwarding y sin delay slot
+#analizo con forwarding y sin delay slot y sin el nop
 #al operar con flotantes es común ver stall str debido a que en ejecucion se requieren varios ciclos de reloj
-#en total 4 RAWs y 2 Stalls str
-# 2.286 CPI
+#en total 16 RAWs, 1 WAR y 2 Stalls str
+# 3 CPI
