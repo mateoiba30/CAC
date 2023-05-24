@@ -13,7 +13,7 @@ factorial:
 
 bnez $a0, else #si no hago recursio no debo manipular la pila
 daddi $v0, $a0, 1
-j fin
+j fin #jr $ra #otra forma
 
 else: daddi $sp, $sp, -8
 sd $ra, 0($sp) #pusheo dir de retorno
