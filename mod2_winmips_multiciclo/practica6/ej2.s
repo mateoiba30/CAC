@@ -18,15 +18,21 @@ NUEVE: .asciiz "NUEVE"
 .code 
 lwu $a0, DATA(r0) ; dir de DATA
 lwu $a1, CONTROL(r0); dir de CONTROL
-daddi $a2, $zero, TEXTO
-lwu $s0, MAL(r0)
+daddi $s0, $zero, MAL
 jal ingreso
 
-
+beqz $v0, mal;si es cero termino
+j fin
+mal: sd $s0, 0($a0); mando dir del string a DATA
+daddi $t0, $zero, 4
+sd $t0, 0($a1) ;  imprimo
 
 fin: halt
 
-ingreso: sd $a2, 0($a0); mando dir del string a DATA
+
+ingreso: daddi $t2, $zero, TEXTO
+
+sd $t2, 0($a0); mando dir del string a DATA
 daddi $t0, $zero, 4
 sd $t0, 0($a1) ;  imprimo
 
