@@ -1,7 +1,7 @@
 .data
 coorX: .byte 24 ; coordenada X de un punto
 coorY: .byte 24 ; coordenada Y de un punto
-color: .byte 0, 0, 0, 0 ;
+color: .byte 0, 0, 0, 0 ; dejar transparencia en cero
 CONTROL: .word32 0x10000
 DATA: .word32 0x10008
 R: .asciiz " rojo: "
@@ -53,7 +53,7 @@ daddi $t0, $0, 4
 sd $t0, 0($a0) ; control escribe mensaje
 daddi $t1, $0, 8
 sd $t1, 0($a0) ; control lee nro y escribe en data
-ld $v0, 0($a1) ; cargo en $v0 lo que tengo en data
+ld $v0, 0($a1) ; cargo en $v0 lo que tengo en data ;  también podría usar un lbu o lb ya que opero de  abytes
 
 jr $ra
 
