@@ -4,7 +4,7 @@ CONTROL: .word32 0x10000
 MSJ1: .asciiz " Ingrese base flotante: "
 MSJ2: .asciiz " Ingrese base entera positiva: "
 MSJ3: .asciiz " resultado: "
-UNO: .word 1.0
+UNO: .double 1.0
 
 ;-----------------------
 
@@ -44,8 +44,9 @@ halt
 ;f1 base
 
 potencia: daddi $t0, $0, 1
-mtc1 $t0, f2
-cvt.d.l f2, f2
+;mtc1 $t0, f2
+;cvt.d.l f2, f2
+l.d f2, UNO($zero)
 beqz $a0, fin
 
 daddi $t1, $a0, 0
