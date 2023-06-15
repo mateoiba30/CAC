@@ -1,11 +1,16 @@
 .data
-cant: .word 2
-datos: .word 1, 2
-res: .word 0
+tabla1: .word 15, 11, 24
+tabla2: .word 0, 0, 0
 
 .code
-ld r4, datos(r0)
-dadd r1, r14, r6
-daddi r2, r2, 1  
-sd r5, datos(r12)
+daddi r1, r0, 0
+daddi r2, r0, 3
+
+loop: ld r3, tabla1(r1)
+daddi r3, r3, 1
+sd r3, tabla2(r1)
+daddi r1, r1, 8
+daddi r2, r2, -1
+bnez r2, loop
+
 halt
