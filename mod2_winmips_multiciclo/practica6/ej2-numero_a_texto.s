@@ -4,9 +4,9 @@ MAL: .asciiz "numero de varios digitos!"
 CONTROL: .word32 0x10000
 DATA: .word32 0x10008
 NUMERO: .word 0
-CERO: .asciiz "CERO  "
-UNO: .asciiz "UNO   "
-DOS: .asciiz "DOS   "
+CERO: .asciiz "CERO"
+UNO: .asciiz "UNO"
+DOS: .asciiz "DOS  "
 TRES: .asciiz "TRES  "
 CUATRO: .asciiz "CUATRO"
 CINCO: .asciiz "CINCO "

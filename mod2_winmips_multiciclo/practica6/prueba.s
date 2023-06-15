@@ -1,9 +1,11 @@
 .data
-NUM: .word 5
-AUX: .word 3
-DATA: .word32 0x10008
+cant: .word 2
+datos: .word 1, 2
+res: .word 0
 
 .code
-daddi $a0, $0, DATA
-
+ld r4, datos(r0)
+dadd r1, r14, r6
+daddi r2, r2, 1  
+sd r5, datos(r12)
 halt

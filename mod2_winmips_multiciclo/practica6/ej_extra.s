@@ -11,12 +11,12 @@ coorX:	.byte 24 		; coordenada X de un punto
 coorY:	.byte 46 		; coordenada Y de un punto
 colorA: .byte 0, 0, 0, 0 	; color negro
 colorB: .byte 255, 255, 0, 0 	; color amarillo
-CONTROL: .word32 0x10000
-DATA: 	.word32 0x10008
+CONTROL: .word 0x10000
+DATA: 	.word 0x10008
 autor:	.asciiz "Emanuel Borda - 2010"
 ;------------------------------------------------------------------------------------
 	.text
-	lwu r24, DATA(r0)  	; r24 = direcci�n de DATA
+	ld r24, DATA(r0)  	; r24 = direcci�n de DATA
 	lbu r10, coorX(r0) 	; r10 = valor de coordenada X
 	lbu r11, coorY(r0) 	; r11 = valor de coordenada Y
 
