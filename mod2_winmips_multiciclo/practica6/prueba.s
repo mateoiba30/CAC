@@ -1,16 +1,17 @@
 .data
-tabla1: .word 15, 11, 24
-tabla2: .word 0, 0, 0
+A: .word 4
+B: .word 5
+C: .word 0
 
 .code
-daddi r1, r0, 0
-daddi r2, r0, 3
+ld $t0, A($0)
+ld $t1, B($0)
 
-loop: ld r3, tabla1(r1)
-daddi r3, r3, 1
-sd r3, tabla2(r1)
-daddi r1, r1, 8
-daddi r2, r2, -1
-bnez r2, loop
+daddi $t1, $t1, -1 ; la 1ra vez ya está multiplicado por 1
+loop: dadd $t0, $t0, $t0
+daddi $t1, $t1, -1
+bnez $t1, loop
+
+sd $t1, C($0)
 
 halt
